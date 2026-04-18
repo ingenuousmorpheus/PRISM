@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0a0912"/>
+      <stop offset="0.5" stop-color="#140f26"/>
+      <stop offset="1" stop-color="#060510"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#ffb27d"/>
+      <stop offset="0.5" stop-color="#7de3ff"/>
+      <stop offset="1" stop-color="#d07dff"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0.2" x2="0.8" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0.1"/></linearGradient>
+    <linearGradient id="r" x1="0" x2="1"><stop offset="0" stop-color="#ffb27d"/><stop offset="1" stop-color="#ffb27d" stop-opacity="0"/></linearGradient>
+    <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#7de3ff"/><stop offset="1" stop-color="#7de3ff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="v" x1="0" x2="1"><stop offset="0" stop-color="#d07dff"/><stop offset="1" stop-color="#d07dff" stop-opacity="0"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#d07dff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#d07dff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <circle cx="200" cy="150" r="220" fill="url(#glow)"/>
+
+  <!-- prism icon on left -->
+  <g transform="translate(80,90)">
+    <rect x="0" y="55" width="70" height="10" fill="url(#beam)"/>
+    <polygon points="70,120 140,15 140,120" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.2"/>
+    <polygon points="140,55 260,30 260,38 140,62" fill="url(#r)"/>
+    <polygon points="140,62 260,62 260,70 140,70" fill="url(#g)"/>
+    <polygon points="140,70 260,95 260,103 140,78" fill="url(#v)"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="420" y="155" font-family="Inter, Segoe UI, system-ui, sans-serif"
+        font-size="96" font-weight="600" letter-spacing="28"
+        fill="url(#title)">PRISM</text>
+  <text x="424" y="200" font-family="Inter, Segoe UI, system-ui, sans-serif"
+        font-size="16" letter-spacing="6" fill="#9891b4">
+    PARALLEL REASONING &amp; INTELLIGENCE SYSTEM MESH
+  </text>
+  <text x="424" y="230" font-family="Inter, Segoe UI, system-ui, sans-serif"
+        font-size="13" letter-spacing="3" fill="#5d597a">
+    one task · many minds · perfect harmony
+  </text>
+</svg>

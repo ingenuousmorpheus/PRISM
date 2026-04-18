@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="beam" x1="0" x2="1" y1="0.5" y2="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="r" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ffb27d"/><stop offset="1" stop-color="#ffb27d" stop-opacity="0"/></linearGradient>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#7de3ff"/><stop offset="1" stop-color="#7de3ff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="b" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#d07dff"/><stop offset="1" stop-color="#d07dff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="glass" x1="0.2" x2="0.8" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  <!-- incoming beam -->
+  <rect x="2" y="57" width="40" height="6" fill="url(#beam)" opacity="0.85"/>
+  <!-- prism triangle -->
+  <polygon points="42,92 82,38 82,92" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.2"/>
+  <!-- refracted rays -->
+  <polygon points="82,64 118,48 118,52 82,68" fill="url(#r)"/>
+  <polygon points="82,66 118,66 118,70 82,70" fill="url(#g)"/>
+  <polygon points="82,68 118,82 118,86 82,72" fill="url(#b)"/>
+  <!-- highlight edge -->
+  <line x1="42" y1="92" x2="82" y2="38" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1"/>
+</svg>

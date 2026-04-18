@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRISM — Parallel Reasoning & Intelligence System Mesh</title>
+<link rel="icon" type="image/svg+xml" href="/static/assets/logo.svg" />
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<!-- Animated prism background -->
+<div class="bg-beam"></div>
+<div class="bg-refract"></div>
+<div class="bg-grain"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="/static/assets/logo.svg" alt="PRISM" class="logo" />
+    <div>
+      <h1>PRISM</h1>
+      <p class="tag">One task · many minds · perfect harmony</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="agent-chip" id="chip-claude">
+      <span class="dot"></span>Claude
+      <small id="model-claude">—</small>
+    </span>
+    <span class="agent-chip" id="chip-openclaw">
+      <span class="dot"></span>OpenClaw
+      <small id="model-openclaw">—</small>
+    </span>
+    <span class="agent-chip" id="chip-mythos">
+      <span class="dot"></span>Mythos
+      <small id="model-mythos">—</small>
+    </span>
+  </div>
+</header>
+
+<main>
+  <!-- LEFT: input + strategy -->
+  <section class="panel panel-input">
+    <label class="panel-label">TASK</label>
+    <textarea id="task" placeholder="Describe what you want the mesh to build, refactor, research, or reason about…"></textarea>
+
+    <label class="panel-label">STRATEGY</label>
+    <div class="strategy-grid" id="strategy-grid"></div>
+
+    <button id="run-btn" class="run-btn">
+      <span class="run-btn-text">RUN THE MESH</span>
+      <span class="run-btn-glow"></span>
+    </button>
+
+    <div class="hint">
+      Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to fire · Esc to abort
+    </div>
+  </section>
+
+  <!-- CENTER: live progress -->
+  <section class="panel panel-progress">
+    <div class="progress-header">
+      <h2>Progress</h2>
+      <span class="progress-pct" id="progress-pct">0%</span>
+    </div>
+    <div class="progress-rail">
+      <div class="progress-fill" id="progress-fill"></div>
+      <div class="progress-shimmer"></div>
+    </div>
+
+    <div class="meters">
+      <div class="meter" data-agent="claude">
+        <div class="meter-head">
+          <span class="meter-name">CLAUDE</span>
+          <span class="meter-tps" id="tps-claude">0 tok/s</span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="bar-claude"></div></div>
+        <div class="meter-foot">
+          <span id="tok-claude">0 in · 0 out</span>
+          <span id="cost-claude">$0.0000</span>
+        </div>
+      </div>
+      <div class="meter" data-agent="openclaw">
+        <div class="meter-head">
+          <span class="meter-name">OPENCLAW</span>
+          <span class="meter-tps" id="tps-openclaw">0 tok/s</span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="bar-openclaw"></div></div>
+        <div class="meter-foot">
+          <span id="tok-openclaw">0 in · 0 out</span>
+          <span id="cost-openclaw">$0.0000</span>
+        </div>
+      </div>
+      <div class="meter" data-agent="mythos">
+        <div class="meter-head">
+          <span class="meter-name">MYTHOS</span>
+          <span class="meter-tps" id="tps-mythos">0 tok/s</span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="bar-mythos"></div></div>
+        <div class="meter-foot">
+          <span id="tok-mythos">0 in · 0 out</span>
+          <span id="cost-mythos">$0.0000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="savings-card">
+      <div class="savings-label">ESTIMATED SAVINGS vs. pure-Claude</div>
+      <div class="savings-value" id="savings-value">$0.0000</div>
+      <div class="savings-pct" id="savings-pct">0% cheaper</div>
+    </div>
+  </section>
+
+  <!-- RIGHT: stream + summary -->
+  <section class="panel panel-stream">
+    <div class="stream-tabs">
+      <button class="tab active" data-tab="stream">LIVE STREAM</button>
+      <button class="tab" data-tab="summary">SUMMARY</button>
+      <button class="tab" data-tab="history">HISTORY</button>
+    </div>
+    <div class="stream-body">
+      <div class="tab-pane active" id="pane-stream"></div>
+      <div class="tab-pane" id="pane-summary">
+        <div class="summary-empty">Run a task to see the summary.</div>
+      </div>
+      <div class="tab-pane" id="pane-history"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>PRISM v0.1 · MIT · built for anyone tired of paying twice</span>
+  <span id="conn-status">● connecting</span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
