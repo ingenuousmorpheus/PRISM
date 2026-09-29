@@ -3,126 +3,229 @@
 # PRISM
 ### Parallel Reasoning & Intelligence System Mesh
 
-**One task. Many minds. Perfect harmony.**
+**A local multi-model AI war room.**
 
-A local bridge that lets Claude, OpenClaw, and Claude Mythos work together as a single swarm — splitting work intelligently, sharing context, and cutting your token bill by 40–70%.
+PRISM coordinates different AI seats, shows who did what, keeps disagreement visible, and tries to avoid expensive model calls when they are not needed.
 
 ![PRISM Banner](frontend/assets/banner.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg)](./LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![Stars](https://img.shields.io/badge/stars-%E2%9C%A8-violet)](#)
-[![Made with love](https://img.shields.io/badge/made%20with-%F0%9F%96%A4-black)](#)
 
 </div>
 
 ---
 
-## Why PRISM?
+## What PRISM is becoming
 
-Anthropic's new policy charges extra if you route your Claude subscription through third‑party agent runners like **OpenClaw**. That's annoying if you've already been paying. PRISM runs **locally on your machine** and acts as a neutral bridge — so:
+PRISM started as a lightweight local bridge between multiple model providers.
 
-- Your Claude subscription stays on Claude.
-- OpenClaw stays on OpenClaw.
-- Claude **Mythos** (the upcoming frontier model) plugs right in the day it drops.
-- Every agent sees the *same task graph* and the *same shared memory*, but they each pay their own bill.
+The current direction is more specific:
 
-No double‑billing. No middleman taxes. Just a clean mesh between the agents you already own.
+> **Use the smallest council that can produce a verified answer.**
+
+That means PRISM should not call three expensive models simply because it can.
+
+Instead it should:
+- start cheap when appropriate;
+- escalate when uncertainty or risk justifies it;
+- preserve model disagreement;
+- show cost/latency/provenance;
+- persist mission history;
+- eventually verify claims with deterministic checks and evidence.
+
+The research and roadmap are in:
+- [PRISMSESSION.md](./PRISMSESSION.md)
+- [docs/WAR_ROOM_RESEARCH.md](./docs/WAR_ROOM_RESEARCH.md)
 
 ---
 
-## Features
+## Current features
 
-| | |
+| Feature | Current state |
 |---|---|
-| 🌈 **Three‑way mesh** | Claude · OpenClaw · Mythos subagents, swappable in one dropdown |
-| 📊 **Live progress bar** | Know exactly when a task completes, down to the millisecond |
-| ⚡ **Per‑agent speedometer** | tokens/sec for Claude *and* OpenClaw *and* Mythos, side‑by‑side |
-| 🪙 **Token meters** | Input/output tokens shown per agent, with a running $ cost estimate |
-| 🧠 **Smart splitter** | Decomposes your task, routes cheap parts to cheap models |
-| 📝 **Task journal** | Every run ends with a plain‑English summary of *who did what* |
-| 🔌 **Pluggable adapters** | Add Ollama, LM Studio, Groq, Gemini, or Mythos in ~40 lines |
-| 🎨 **Fancy GUI** | Glassmorphism, animated prism refraction, zero AI‑slop aesthetics |
-| 💾 **Run history** | Every task saved locally — replay, fork, or share |
+| Local FastAPI + WebSocket runtime | Working |
+| Claude adapter | Working when configured |
+| OpenAI-compatible adapter | Working; may point at OpenAI-compatible local/cloud endpoints |
+| Optional third Anthropic-wire-compatible seat | Explicit configuration required; no silent fallback |
+| Live streaming | Working |
+| Per-agent token/cost/latency telemetry | Working as adapter-side estimates |
+| Conditional cascade | Working: stronger seat is skipped unless first pass emits `[ESCALATE]` |
+| War Room strategy | Working: skeptical analyst + practical operator + low-cost chair |
+| Durable local run journal | JSONL reloads across restart |
+| Stable run IDs | Working |
+| Executed/skipped step tracking | Working |
+| Shared vector/semantic cache | Planned |
+| General tool execution + receipts | Planned |
+| Human approval gates | Planned |
+| Dynamic capability registry | Planned |
+| Cross-machine specialist nodes | Planned |
 
 ---
 
-## Token‑Splitting Strategies
+## Strategies
 
-PRISM ships with **five** splitter strategies you can toggle per run. Each one is designed to make the user feel the download was worth it.
+PRISM currently exposes six routing strategies.
 
-1. **`draft-polish`** — OpenClaw drafts, Claude polishes. ~55% cheaper than pure Claude.
-2. **`parallel-specialist`** — Claude handles reasoning, OpenClaw handles boilerplate, Mythos handles creativity. Runs all three simultaneously.
-3. **`cascade`** — Cheapest model tries first; escalates only if confidence < threshold.
-4. **`vote-of-three`** — All three models answer; PRISM picks the majority answer. Expensive but bulletproof.
-5. **`context-share`** — One agent reads the repo once, others consume the distilled summary. Saves ~70% input tokens on large codebases.
+### `cascade` — recommended default
+A cheaper seat tries first.
 
-The router logs which strategy fired, how much it saved vs. the baseline, and shows it in the task summary.
+If its answer begins with:
+
+```
+[ESCALATE]
+```
+
+PRISM runs Claude as the stronger escalation seat.
+
+If not, Claude is skipped.
+
+This is the first real efficiency gate in PRISM.
+
+### `war-room`
+Two independent perspectives run:
+- **skeptic** — stronger reasoning / hidden-risk review;
+- **operator** — practical / implementation-focused view.
+
+A lower-cost chair receives both reports and returns:
+
+- CONSENSUS
+- DISAGREEMENT
+- DECISION/OUTPUT
+- VERIFY NEXT
+
+The chair is instructed not to erase unresolved disagreement.
+
+### `draft-polish`
+OpenClaw drafts; Claude polishes.
+
+### `parallel-specialist`
+Reasoning, structure, and creative/UX seats run independently in parallel.
+
+Their output remains visibly separate; PRISM does not pretend a merge happened when it did not.
+
+### `vote-of-three`
+Three independent answers are shown.
+
+Current behavior intentionally **does not claim a mathematical majority or verified consensus**. A real evidence-aware disagreement engine is planned.
+
+### `context-share`
+A cheaper seat compresses the context into a compact brief, then the stronger seat acts on that brief.
+
+This is the beginning of the future Context Broker.
 
 ---
 
 ## Quickstart
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/PRISM.git
+git clone https://github.com/ingenuousmorpheus/PRISM.git
 cd PRISM
 pip install -r requirements.txt
-cp .env.example .env       # add your API keys
-python backend/server.py   # opens http://127.0.0.1:7369
+cp .env.example .env
+python backend/server.py
 ```
 
-Windows users: just double‑click `run.bat`.
+Windows users can run:
+
+```
+run.bat
+```
+
+Default local UI:
+
+```
+http://127.0.0.1:7369
+```
 
 ---
 
 ## Configuration
 
-Edit `.env`:
+Example:
 
 ```env
-CLAUDE_API_KEY=sk-ant-...
-OPENCLAW_API_KEY=oc_...
-OPENCLAW_BASE_URL=https://api.openclaw.ai/v1
-MYTHOS_API_KEY=                # leave blank until release
-MYTHOS_BASE_URL=               # leave blank until release
+CLAUDE_API_KEY=
+CLAUDE_MODEL=claude-sonnet-4-5
+CLAUDE_BASE_URL=https://api.anthropic.com/v1
 
-DEFAULT_STRATEGY=draft-polish
-PRISM_PORT=7369                # 7 · 3 · 6 · 9 — a nod to the build
+OPENCLAW_API_KEY=
+OPENCLAW_MODEL=gpt-4o-mini
+OPENCLAW_BASE_URL=https://api.openai.com/v1
+
+# Optional third seat.
+# Both key and model must be explicitly configured.
+MYTHOS_API_KEY=
+MYTHOS_MODEL=
+MYTHOS_BASE_URL=https://api.anthropic.com/v1
+
+DEFAULT_STRATEGY=cascade
+PRISM_HOST=127.0.0.1
+PRISM_PORT=7369
 ```
+
+PRISM does not silently substitute Claude for the optional third seat.
 
 ---
 
-## Adding a New Subagent
+## Efficiency philosophy
 
-Drop a file in `backend/adapters/`:
+PRISM should optimize for more than token price.
 
-```python
-# backend/adapters/my_model.py
-from .base import BaseAdapter
+Future routing decisions should consider:
+- task complexity;
+- risk;
+- model capability;
+- latency;
+- provider health;
+- privacy/local-only requirements;
+- available cache;
+- disagreement;
+- verification results;
+- remaining budget.
 
-class MyAdapter(BaseAdapter):
-    name = "mymodel"
-    async def stream(self, prompt, ctx):
-        # yield {"delta": str, "tokens_in": int, "tokens_out": int}
-        ...
-```
+The long-term metric is:
 
-Register it in `backend/adapters/__init__.py`. Done.
+> **cost per verified successful mission**
+
+not merely cost per token.
 
 ---
 
-## Roadmap
+## Planned War Room layers
 
-- [x] Claude + OpenClaw bridge
-- [x] Live progress + speedometer
-- [x] Five token‑splitting strategies
-- [ ] Claude Mythos adapter (ready, waiting on API)
-- [ ] VS Code extension
-- [ ] CLI mode (`prism "refactor this repo"`)
-- [ ] Shared vector cache across agents
+1. **Mission Ledger** — durable run/step/model/evidence records.
+2. **Capability Registry** — exact provider/model/health/cost/tool capabilities.
+3. **Adaptive Router** — explainable model selection + fallback.
+4. **Evidence & Validators** — tests, schemas, source checks, file hashes, receipts.
+5. **Disagreement Engine** — convene extra models only when material uncertainty remains.
+6. **Context Broker** — shared digest + role-specific context slices + cache.
+7. **Human Gates** — explicit approval for consequential external actions.
+8. **Distributed Specialist Nodes** — safe bounded reasoning workers on other machines.
+9. **Benchmark Lab** — compare cost, latency, retries and verified success.
+
+See [docs/WAR_ROOM_RESEARCH.md](./docs/WAR_ROOM_RESEARCH.md) for the full design.
+
+---
+
+## Current limitations
+
+PRISM is still early.
+
+Important limits:
+- cost numbers are estimates, not provider invoices;
+- no semantic cache yet;
+- no generic tool execution layer yet;
+- no durable approval workflow yet;
+- the UI still assumes three named seats in several places;
+- the optional third seat must be configured manually;
+- "vote-of-three" is a comparison strategy, not a verified majority engine;
+- deterministic validators and receipt-based completion are still planned.
+
+These are roadmap items rather than hidden assumptions.
 
 ---
 
 ## License
 
-MIT — do whatever you want. Star the repo if PRISM saves you money. 🖤
+MIT. 🖤
