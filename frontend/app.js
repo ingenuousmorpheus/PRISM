@@ -5,7 +5,8 @@ const STRATEGY_DESC = {
   "parallel-specialist": "All 3 run in parallel, each on its specialty.",
   "cascade":             "Cheapest tries first; escalates only if unsure.",
   "vote-of-three":       "All 3 answer; PRISM picks consensus. Robust.",
-  "context-share":       "One reads, others use the distilled brief. ~70% savings.",
+  "context-share":       "One reads, others use the distilled brief.",
+  "war-room":            "Skeptic + operator deliberate; a low-cost chair preserves dissent.",
 };
 
 const $ = (id) => document.getElementById(id);
@@ -169,6 +170,21 @@ function handle(evt) {
       document.querySelector(`.meter[data-agent="${evt.agent}"]`)?.classList.remove("active");
       break;
     }
+    case "step_skipped": {
+      stepsDone += 1;
+      const p = $("pane-stream");
+      const d = document.createElement("div");
+      d.className = "bubble";
+      d.innerHTML = '<div class="bubble-head"><span class="bubble-agent">SKIPPED · ' +
+        escapeHtml(evt.role || "") + '</span><span>' + escapeHtml(evt.agent || "") +
+        '</span></div><div class="bubble-text">' +
+        escapeHtml(evt.reason || "not needed") + '</div>';
+      p.appendChild(d);
+      const pct = Math.min(100, (stepsDone / Math.max(1, stepsMeta.length)) * 100);
+      $("progress-fill").style.width = pct + "%";
+      $("progress-pct").textContent = Math.round(pct) + "%";
+      break;
+    }
     case "complete": {
       running = false;
       $("run-btn").disabled = false;
@@ -176,7 +192,7 @@ function handle(evt) {
       $("progress-fill").style.width = "100%";
       $("progress-pct").textContent = "100%";
       $("savings-value").textContent = "$" + evt.saved_usd.toFixed(4);
-      $("savings-pct").textContent = `${evt.saved_pct}% cheaper than pure Claude`;
+      $("savings-pct").textContent = `~${evt.saved_pct}% estimated vs configured Claude baseline`;
       ["claude","openclaw","mythos"].forEach(a => $(`chip-${a}`)?.classList.remove("active"));
       renderSummary(evt);
       loadHistory();
@@ -234,7 +250,7 @@ async function loadHistory() {
     p.innerHTML = h.reverse().map(r => `
       <div class="history-row">
         <div class="history-task">${escapeHtml((r.task || "").slice(0, 120))}</div>
-        <div class="history-meta">${r.strategy} · saved $${(r.saved_usd||0).toFixed(4)} (${(r.saved_pct||0)}%) · ${new Date((r.ts||0)*1000).toLocaleTimeString()}</div>
+        <div class="history-meta">${r.strategy} · run ${r.run_id || "legacy"} · spent ~$ ${(r.spent_usd||0).toFixed(4)} · ${new Date((r.ts||0)*1000).toLocaleString()}</div>
       </div>`).join("");
   } catch {}
 }
