@@ -6,6 +6,52 @@ PRISM started as a lightweight local multi-model bridge. The stronger direction 
 
 This document records a GitHub landscape review and the design gaps PRISM should target without becoming another oversized orchestration framework.
 
+## Decision-room enhancement plan - 2026-09-29
+
+**Status: DESIGN ONLY.** Reviewed source: `660856d62bacf318d21c7870f1bbc71c8451bee1`. The owner selected personal councils **and small-team rooms from launch**. This section extends the earlier roadmap; its release gates govern the future build. No feature implementation is authorized by this document alone.
+
+### Verified baseline and prerequisites
+
+FastAPI, streaming adapters, six routing strategies, conditional escalation and completed-run JSONL history exist. `backend/server.py::_execute_plan` persists only completed aggregate records, truncates stored tasks to 500 characters, and silently ignores journal-write errors. Intermediate output, failed runs and resumable conversations are not durable. `ws_endpoint` awaits execution on the client socket; reconnect has no replay or cancellation protocol. `frontend/app.js` assumes three seats and still claims vote-of-three picks consensus, contradicting `backend/router.py::_vote`. Model/error metadata enters some `innerHTML` templates without consistent escaping. Existing smoke tests validate routing basics, not these failure boundaries. These are source-review findings, not runtime-tested defects in this documentation pass.
+
+### Product research and differentiation
+
+Primary sources reviewed 2026-09-29. Public documentation is evidence of advertised capabilities, not independent product testing; an undocumented feature is not proven absent.
+
+| Product / source | Documented capability | PRISM implication |
+|---|---|---|
+| [Council](https://github.com/albertofettucini/Council) | Blind peer review, bounded debate, dissent, decision journal, cost estimates | Treat these as baseline expectations, not inventions. |
+| [Synode](https://github.com/mahatab/synode-council-of-ai-agents) | Independent/sequential councils, local/cloud models, follow-up mentions | Support persistent discussions and targeted follow-ups. |
+| [TeamAI](https://platform.teamai.com/collaborative-workspaces/) | Shared human/AI conversations and workspaces | Participation, room access and attribution belong in the first release. |
+| [Loomio](https://www.loomio.com/collaborative-decision-making/) | Advice, consent, consensus and proposals | Human decision authority must be explicit and separate from AI recommendations. |
+| [Polis](https://compdemocracy.org/faq/) | Opinion groups and cross-group agreement; not intended for groups below 50-100 | Preserve minority positions, but defer statistical opinion clustering for small rooms. |
+
+PRISM's proposed distinction is the combination of evidence lineage, decision sensitivity, selective spending and outcome review in personal and team rooms. This combination was not established in the reviewed product descriptions; do not claim exclusive or market-wide novelty.
+
+### Capabilities and defaults
+
+1. **Persistent rooms:** private councils and invite-only teams use one room model, threads, mentions, attachments, presence and asynchronous participation. Roles are owner/member/viewer; AI seats are visibly labeled and cannot vote as humans or finalize decisions. Default deployment is local; remote team access requires authentication and HTTPS.
+2. **Decision contracts:** record question, alternatives, constraints, weighted criteria, budget, deadline and accountable owner before deliberation. Default finalization is owner approval. Optional majority mode freezes eligible human voters and quorum before opening; more than half of valid ballots must support a choice and quorum must be met. Ties or missing quorum remain unresolved; rule changes require a new ballot.
+3. **Evidence/disagreement map:** connect material claims to source URLs or attachments, retrieval times, excerpts, verification status, objections and transcript references. Separate factual disputes from preference differences. Duplicate citations to one underlying source are not independent confirmation. Model agreement never proves truth.
+4. **Sensitivity explorer:** recompute weighted option scores as assumptions or weights change; show thresholds that alter the recommendation. Separate deterministic calculations from model-generated scenarios. Scenario forks preserve the original decision and evidence snapshot.
+5. **Next-best-question advisor:** propose the missing fact most likely to change the decision and the cheapest useful way to obtain it. Label benefit estimates as heuristics until calibrated against outcomes; do not claim measured value of information from model confidence alone.
+6. **Budget-aware councils:** independent first responses, at most one challenge round, then synthesis or an explicit unresolved result. Enforce call/time/spend envelopes with reservation before dispatch, output-token limits and accounting after completion; disclose provider billing uncertainty. Explain escalation and substitutions. A single local model may serve sequential roles but must be labeled as one model, not independent model diversity.
+7. **Decision change tracking:** retain accepted choice, dissent, evidence snapshot, owner and review date. Later evidence proposes a new version and explains what changed. Outcome reviews never silently rewrite the original record or automatically declare a model reliable.
+8. **Room UI:** room navigation, central conversation and evidence/decision panel; Conversation, Options, Evidence and Decision views. Include dynamic AI seats, readable budgets, cancellation, reconnect status and Markdown/JSON exports. Keep technical traces behind an optional details view.
+
+### Delivery gates and evaluation
+
+| Gate | Future work and release condition |
+|---|---|
+| Foundation (extends PR-00/01) | Correct inaccurate labels/unsafe rendering; transactional SQLite event journal; preserve and idempotently import JSONL without fabricating missing steps; durable failures, cancellation and reconnect replay. Persistence failure must not emit durable-complete success. |
+| Personal + team launch (extends PR-02/03/07) | Authenticated invited rooms, membership checks on every read/write/subscription/export, dynamic model registry, per-room provider/privacy rules, bounded councils and decision contracts. Both room types must pass acceptance before launch. |
+| Evidence decisions (extends PR-04/05/06) | Structured validated claims/options, source lineage, dissent, human finalization, scoped context and exports. Use exact cache first; cache keys include room, context, model and policy versions. No cross-room memory leakage. |
+| Differentiation (extends PR-09) | Sensitivity forks, next-question suggestions and scheduled outcome review. Benchmark against single-cheap, single-strong and existing cascade baselines before claiming superiority. |
+
+Test reconnect replay, duplicate commands, cancellation mid-stream, provider failure with partial output, budget exhaustion, restart during a paid call, disk-write failure, cross-room access, malicious rendered content, stale/conflicting evidence, duplicate sources, minority dissent, voting ties, and decision versioning. Use deterministic fixtures plus opt-in live-provider tests; no paid calls in default CI. Evaluate with blinded human ratings, citation correctness, unresolved-risk detection, correction rate, latency and cost per accepted evidence-supported decision. Acceptance is not model agreement. Report sample size and uncertainty; withhold superiority claims unless measured results support them.
+
+Keep external action execution, distributed workers, broad integrations and large-population opinion clustering deferred. Preserve FastAPI, the existing adapter boundary and vanilla frontend. Proposed interfaces and compatibility rules are in [ARCHITECTURE.md](ARCHITECTURE.md). This documentation-only assignment ends after saving and pushing the plan; it starts no implementation phase.
+
 ## Public projects reviewed
 
 ### LangGraph

@@ -87,6 +87,8 @@ If the optional third seat is not explicitly configured, it says it is unavailab
 
 ## Current next phase
 
+**Planning update 2026-09-29:** the owner selected personal AI councils and small-team decision rooms from launch. The documentation-only enhancement below refines the future sequence; no additional implementation phase was started in this pass.
+
 Continue with **PR-01 Mission Ledger**, then **PR-02 Capability Registry**.
 
 Recommended immediate implementation:
@@ -128,3 +130,13 @@ When the owner says:
 5. start at the first incomplete PR phase;
 6. do not silently substitute providers/models;
 7. do not claim completion without a concrete code/test/receipt basis.
+
+## Decision-room research and plan saved - 2026-09-29
+
+Codex reviewed source at `660856d62bacf318d21c7870f1bbc71c8451bee1` and primary product documentation for Council, Synode, TeamAI, Loomio and Polis. The codebase-memory project list contained no PRISM index, so repository source was inspected directly. This was a documentation assignment, not a feature build.
+
+Updated `docs/WAR_ROOM_RESEARCH.md` with the owner's dual audience choice, verified current gaps, dated competitive sources, proposed differentiation, release gates and evaluation criteria. Updated `docs/ARCHITECTURE.md` to distinguish implemented behavior from proposed room/event/decision interfaces and correct the stale consensus and strategy descriptions.
+
+Future priorities: reliable persistence and reconnect; personal/team room isolation; explicit human decision contracts; evidence and dissent; budget-aware councils; sensitivity analysis and outcome review. Competitive differentiation is a research hypothesis, not a claim that all other products lack these abilities. Existing features such as blind review and decision journals are explicitly credited to comparable products.
+
+Known prerequisites remain unimplemented: unsafe HTML metadata/error insertion, stale consensus UI copy, swallowed journal-write errors, socket-owned execution, hard-coded seats, and incomplete run history. No production files, dependencies, credentials, model configuration or other project were changed. Do not mark any new capability shipped on the strength of this plan.
